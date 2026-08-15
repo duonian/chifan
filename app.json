@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/members/members",
+    "pages/plan/plan",
+    "pages/recipes/recipes",
+    "pages/nutrition/nutrition",
+    "pages/mine/mine",
+    "pages/kitchen/kitchen",
+    "pages/detail/detail",
+    "pages/shopping/shopping"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FBF8F3",
+    "navigationBarTitleText": "家常安食",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F1EA"
+  },
+  "tabBar": {
+    "color": "#9A9086",
+    "selectedColor": "#B85C38",
+    "backgroundColor": "#FFFDFA",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "首页" },
+      { "pagePath": "pages/plan/plan", "text": "今日食谱" },
+      { "pagePath": "pages/recipes/recipes", "text": "菜谱库" },
+      { "pagePath": "pages/nutrition/nutrition", "text": "营养概览" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
