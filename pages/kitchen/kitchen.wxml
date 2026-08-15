@@ -1,0 +1,132 @@
+<view class="page">
+
+  <!-- 头部 -->
+  <view class="k-head">
+    <view class="k-title">我的厨房</view>
+    <view class="k-sub">记录常吃的菜和家里现有的食材，帮你清库存、巧搭配</view>
+  </view>
+
+  <!-- 无成员 -->
+  <view wx:if="{{!hasMembers}}" class="empty">
+    <text class="emoji">👨‍👩‍👧</text>
+    <view>还没有家庭成员档案</view>
+    <view class="muted tiny" style="margin-top:12rpx">先添加成员并填写身体状况，才能按全家适配度搭配</view>
+    <view class="btn btn-primary btn-sm" style="margin-top:24rpx" bindtap="goMembers">去添加成员</view>
+  </view>
+
+  <block wx:else>
+
+    <!-- 常吃菜 -->
+    <view class="card">
+      <view class="row-between">
+        <view class="h2">我常吃的菜</view>
+        <view class="extra" bindtap="addClick">＋ 添加</view>
+      </view>
+      <view class="muted tiny" style="margin-top:8rpx">从菜谱库挑选，系统会按全家体质标注适配度</view>
+
+      <view wx:if="{{regularDishes.length}}" class="k-list" style="margin-top:14rpx">
+        <view wx:for="{{regularDishes}}" wx:key="id" class="k-item" data-id="{{item.id}}" bindtap="openDetail">
+          <view class="flex1">
+            <view class="k-name">{{item.name}}</view>
+            <view class="k-meta">{{item.regionName}} · {{item.catName}}</view>
+          </view>
+          <view class="suit {{item.suitCls}}">{{item.total}} 分 · {{item.suitText}}</view>
+          <view class="k-del" catchtap="removeRegular" data-id="{{item.id}}">×</view>
+        </view>
+      </view>
+      <view wx:else class="muted small" style="margin-top:14rpx;padding:20rpx 0;text-align:center">还没有添加，点「＋ 添加」选几道家常菜</view>
+    </view>
+
+    <!-- 现有食材 / 剩菜 -->
+    <view class="card">
+      <view class="h2">家里现有的食材 / 剩菜</view>
+      <view class="muted tiny" style="margin-top:8rpx">记下冰箱里还剩什么，智能搭配会优先用掉它们</view>
+
+      <view wx:if="{{inventory.length}}" class="wrap" style="margin-top:14rpx">
+        <view wx:for="{{inventory}}" wx:key="*this" class="inv-chip" data-name="{{item}}" bindtap="removeInv">{{item}} <text class="inv-x">×</text></view>
+      </view>
+
+      <view class="add-row">
+        <input class="add-input" placeholder="如：鸡蛋、番茄、半根胡萝卜" value="{{invInput}}" bindinput="invInput" confirm-type="done" bindconfirm="addInv" />
+        <view class="btn btn-primary btn-sm" bindtap="addInv">添加</view>
+      </view>
+
+      <view class="muted tiny" style="margin-top:14rpx">快速添加：</view>
+      <view class="wrap" style="margin-top:10rpx">
+        <view wx:for="{{invSuggestions}}" wx:key="*this"
+              class="suggest-chip {{inventory.indexOf(item) > -1 ? 'on' : ''}}"
+              data-name="{{item}}" bindtap="quickInv">{{item}}</view>
+      </view>
+    </view>
+
+    <!-- 智能搭配 -->
+    <view class="btn btn-primary btn-block" style="margin-top:8rpx" bindtap="onSmart">🍳 智能搭配</view>
+
+    <!-- 结果 -->
+    <block wx:if="{{result}}">
+
+      <view wx:if="{{result.regular.length}}" class="section-title">
+        <view class="bar"></view><view class="txt">常吃菜 · 今日适配</view>
+      </view>
+      <view wx:if="{{result.regular.length}}" class="card">
+        <view wx:for="{{result.regular}}" wx:key="id" class="k-item">
+          <view class="flex1"><view class="k-name">{{item.name}}</view><view class="k-meta">{{item.regionName}} · {{item.catName}}</view></view>
+          <view class="suit {{item.suitCls}}">{{item.total}} 分 · {{item.suitText}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{result.useUp.length}}" class="section-title">
+        <view class="bar"></view><view class="txt">清库存 · 用现有食材能做</view>
+      </view>
+      <view wx:if="{{result.useUp.length}}" class="card">
+        <view wx:for="{{result.useUp}}" wx:key="id" class="k-item">
+          <view class="flex1"><view class="k-name">{{item.name}}</view><view class="k-meta">可用：{{item.used}}</view></view>
+          <view class="suit {{item.suitCls}}">{{item.total}} 分 · {{item.suitText}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{result.complement.length}}" class="section-title">
+        <view class="bar"></view><view class="txt">互补搭配 · 还差这几道</view>
+      </view>
+      <view wx:if="{{result.complement.length}}" class="card">
+        <view wx:for="{{result.complement}}" wx:key="id" class="k-item">
+          <view class="flex1"><view class="k-name">{{item.name}}</view><view class="k-meta">{{item.regionName}} · {{item.catName}}</view></view>
+          <view class="suit {{item.suitCls}}">{{item.total}} 分 · {{item.suitText}}</view>
+        </view>
+        <view wx:if="{{result.needBuy.length}}" class="buy-box">
+          <view class="buy-title">需要采购：</view>
+          <view class="wrap">
+            <view wx:for="{{result.needBuy}}" wx:key="*this" class="buy-chip">{{item}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{!result.regular.length && !result.useUp.length && !result.complement.length}}" class="notice">
+        暂未找到合适的搭配建议。可以：多添加几位成员、补充几道常吃菜，或在「现有食材」里多写几种食材试试。
+      </view>
+    </block>
+  </block>
+
+  <!-- 添加菜品弹层 -->
+  <view wx:if="{{pickerVisible}}" class="picker-mask" bindtap="closePicker">
+    <view class="picker" catchtap="noop">
+      <view class="picker-head">
+        <view class="h3">添加常吃的菜</view>
+        <view class="picker-close" bindtap="closePicker">×</view>
+      </view>
+      <input class="add-input" style="margin:14rpx 0" placeholder="搜索菜名或食材，如：蒸鱼、山药" value="{{pickerQuery}}" bindinput="pickerInput" />
+      <scroll-view scroll-y class="picker-list">
+        <view wx:if="{{!pickerResults.length}}" class="muted small" style="text-align:center;padding:30rpx">输入关键词查找菜谱</view>
+        <view wx:for="{{pickerResults}}" wx:key="id" class="picker-item" data-id="{{item.id}}" bindtap="pickRecipe">
+          <view class="flex1">
+            <view class="k-name">{{item.name}}</view>
+            <view class="k-meta">{{item.regionName}} · {{item.catName}}</view>
+          </view>
+          <view class="picker-add">＋</view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view style="height:40rpx"></view>
+</view>
