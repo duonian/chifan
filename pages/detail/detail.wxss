@@ -1,0 +1,166 @@
+/* ===== 菜谱详情页 ===== */
+.d-head {
+  background: #FFFDFA;
+  border-radius: 24rpx;
+  padding: 36rpx 30rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 20rpx rgba(120, 100, 80, 0.06);
+}
+
+/* 小标签（地区/分类/食性/耗时） */
+.mini-tag {
+  font-size: 20rpx;
+  background: #F2ECE3;
+  color: #8A7F71;
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  margin-right: 10rpx;
+  line-height: 1.6;
+}
+
+/* 家庭适配卡片 */
+.score-card .score-num {
+  font-size: 64rpx;
+  font-weight: 800;
+  color: #B85C38;
+  line-height: 1.1;
+}
+.score-card .score-unit {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #B0A697;
+  margin-left: 4rpx;
+}
+.score-badge {
+  background: #EAF1E9;
+  color: #4E7A56;
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 10rpx 22rpx;
+  border-radius: 100rpx;
+}
+
+/* 家庭成员逐条分析 */
+.ana-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+}
+.ana-row + .ana-row {
+  border-top: 1rpx solid #F0EAE0;
+}
+.ana-level {
+  font-size: 21rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 100rpx;
+  margin-left: 14rpx;
+}
+.lv-best { background: #E4F0E7; color: #35704A; }
+.lv-good { background: #EAF1E9; color: #4E7A56; }
+.lv-normal { background: #FAF0DE; color: #93702C; }
+.lv-avoid { background: #FAE7E3; color: #B24C3C; }
+.lv-block { background: #F2D9D6; color: #9A2E21; font-weight: 700; }
+
+.ana-line {
+  font-size: 23rpx;
+  margin-top: 6rpx;
+  line-height: 1.55;
+}
+.ana-line.good { color: #3F7350; }
+.ana-line.bad { color: #B24C3C; }
+
+/* 营养三格 */
+.nutri-row {
+  display: flex;
+  padding: 30rpx 10rpx;
+}
+.nutri-cell {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+.nutri-cell::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1rpx;
+  background: #EDE6DB;
+}
+.nutri-cell:last-child::after { display: none; }
+.nc-num { font-size: 38rpx; font-weight: 700; color: #3A342D; }
+.nc-lbl { font-size: 22rpx; color: #A2988B; margin-top: 8rpx; }
+
+/* 食材用量 */
+.ing-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx dashed #F0EAE0;
+}
+.ing-row:last-of-type { border-bottom: none; }
+.ing-name { font-size: 27rpx; color: #3A342D; }
+.ing-qty { font-size: 27rpx; font-weight: 600; color: #B85C38; }
+
+/* 步进器 */
+.stepper {
+  display: flex;
+  align-items: center;
+  background: #F7F3EC;
+  border-radius: 100rpx;
+  padding: 4rpx;
+}
+.step-btn {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #FFFDFA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #B85C38;
+  box-shadow: 0 2rpx 8rpx rgba(120, 100, 80, 0.08);
+}
+.step-num {
+  min-width: 96rpx;
+  text-align: center;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #3A342D;
+}
+
+/* 做法步骤 */
+.step-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 14rpx 0;
+}
+.step-idx {
+  width: 44rpx;
+  height: 44rpx;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #B85C38;
+  color: #fff;
+  font-size: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18rpx;
+  margin-top: 2rpx;
+}
+.step-row .flex1 {
+  font-size: 26rpx;
+  color: #4A4338;
+  line-height: 1.65;
+}
+
+/* 宜忌标题 */
+.dl {
+  font-size: 27rpx;
+  font-weight: 600;
+  color: #3A342D;
+}
