@@ -1,0 +1,51 @@
+.page { padding: 0 24rpx; }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24rpx 4rpx 18rpx;
+}
+.date-nav {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  background: #FFFDFA; color: #B85C38; font-size: 40rpx; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(120,100,80,.08);
+}
+.date-center { flex: 1; text-align: center; }
+.date-main { font-size: 30rpx; font-weight: 700; color: #2E2822; }
+.date-sub { font-size: 22rpx; color: #9A9086; margin-top: 4rpx; }
+
+/* 整体营养网格 */
+.nutri-grid { display: flex; flex-wrap: wrap; margin-top: 18rpx; }
+.nutri-cell {
+  width: 50%; padding: 18rpx 10rpx; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center;
+}
+.nutri-num { font-size: 44rpx; font-weight: 800; color: #2E2822; line-height: 1.1; }
+.nutri-num .unit { font-size: 24rpx; font-weight: 600; margin-left: 2rpx; }
+.nutri-num.warn { color: #C0504D; }
+.nutri-num.mid { color: #C77A2E; }
+.nutri-num.ok { color: #3F7350; }
+.nutri-label { font-size: 22rpx; color: #9A9086; margin-top: 6rpx; }
+
+/* 分餐次 */
+.meal-row {
+  display: flex; align-items: center;
+  padding: 22rpx 6rpx; border-bottom: 1px solid #F0E8DC;
+}
+.meal-row:last-child { border-bottom: none; }
+.meal-name { width: 140rpx; font-size: 28rpx; font-weight: 600; color: #2E2822; }
+.meal-stat { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.ms-num { font-size: 30rpx; font-weight: 700; color: #B85C38; }
+.ms-lbl { font-size: 20rpx; color: #9A9086; margin-top: 2rpx; }
+
+/* 营养重点 */
+.target-row { padding: 20rpx 0; border-bottom: 1px solid #F0E8DC; }
+.target-row:last-child { border-bottom: none; }
+.target-title {
+  font-size: 27rpx; font-weight: 700; color: #B85C38; margin-bottom: 8rpx;
+}
+.target-text { font-size: 24rpx; color: #6B6358; line-height: 1.6; }
+
+.empty { text-align: center; padding: 120rpx 40rpx; color: #9A9086; }
+.empty .emoji { font-size: 80rpx; display: block; margin-bottom: 20rpx; }
+.empty .muted { font-size: 24rpx; }
