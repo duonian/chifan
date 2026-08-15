@@ -1,0 +1,50 @@
+<view class="page" wx:if="{{planExists}}">
+
+  <view class="head card">
+    <view class="row-between">
+      <view>
+        <view class="h2">{{dateLabel}}</view>
+        <view class="muted small" style="margin-top:6rpx">共 {{total}} 样食材 · {{peopleCount}} 人份</view>
+      </view>
+      <view class="people-pill">{{peopleCount}} 人</view>
+    </view>
+    <view class="progress">
+      <view class="progress-bar" style="width:{{total ? checkedCount / total * 100 : 0}}%"></view>
+    </view>
+    <view class="progress-txt small">已购 {{checkedCount}} / {{total}}</view>
+  </view>
+
+  <view class="list">
+    <view
+      wx:for="{{items}}"
+      wx:key="key"
+      class="buy-item {{item.checked ? 'is-checked' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="toggleItem"
+    >
+      <view class="check {{item.checked ? 'on' : ''}}">{{item.checked ? '✓' : ''}}</view>
+      <view class="flex1">
+        <view class="buy-name {{item.checked ? 'strike' : ''}}">{{item.name}}</view>
+        <view wx:if="{{item.fromText}}" class="buy-from">来自：{{item.fromText}}</view>
+      </view>
+      <view class="buy-qty">{{item.display}}</view>
+    </view>
+  </view>
+
+  <view class="action-row">
+    <view class="btn btn-ghost btn-sm ghost-flex" bindtap="toggleAll">{{allChecked ? '取消全选' : '全选'}}</view>
+    <view class="btn btn-primary btn-sm primary-flex" bindtap="copyList">复制清单</view>
+  </view>
+
+  <view style="height:40rpx"></view>
+</view>
+
+<!-- 空状态 -->
+<view class="page" wx:if="{{!planExists}}">
+  <view class="empty">
+    <text class="emoji">🛒</text>
+    <view style="font-size:30rpx;font-weight:600;margin-bottom:12rpx">还没有今天的采购清单</view>
+    <view class="muted">先到「今日食谱」生成一天的配餐，<br/>这里会自动汇总所需食材。</view>
+    <view class="btn btn-primary btn-block" style="margin-top:40rpx" bindtap="goPlan">去生成食谱</view>
+  </view>
+</view>
