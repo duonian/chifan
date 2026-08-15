@@ -1,0 +1,64 @@
+<view class="page">
+
+  <view class="search-bar">
+    <input class="search-input" placeholder="搜菜名、食材，如「山药」「鲈鱼」" value="{{keyword}}" bindinput="onKeyword" />
+    <view class="filter-btn {{showFilter ? 'on' : ''}}" bindtap="toggleFilter">筛选</view>
+  </view>
+
+  <view wx:if="{{showFilter}}" class="card filter-panel">
+    <view class="filter-label">地区菜系</view>
+    <view class="wrap">
+      <view wx:for="{{regions}}" wx:key="id"
+            class="fchip {{regionFilter === item.id ? 'on' : ''}}"
+            data-id="{{item.id}}" bindtap="pickRegion">{{item.name}}</view>
+    </view>
+
+    <view class="filter-label">菜品类型</view>
+    <view class="wrap">
+      <view wx:for="{{cats}}" wx:key="key"
+            class="fchip {{catFilter === item.key ? 'on' : ''}}"
+            data-id="{{item.key}}" bindtap="pickCat">{{item.name}}</view>
+    </view>
+
+    <view class="filter-label">针对症状（只看对该症状有益的菜）</view>
+    <view class="wrap">
+      <view wx:for="{{conditions}}" wx:key="id"
+            class="fchip {{condFilter === item.id ? 'on' : ''}}"
+            data-id="{{item.id}}" bindtap="pickCond">{{item.name}}</view>
+    </view>
+
+    <view class="btn btn-ghost btn-block btn-sm" style="margin-top:20rpx" bindtap="reset">清空筛选</view>
+  </view>
+
+  <view class="result-bar">
+    <text class="muted small">共 {{total}} 道</text>
+    <text wx:if="{{hasMembers}}" class="muted small">已按你家的体质排序</text>
+    <text wx:else class="muted small">添加成员后可按适配度排序</text>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="id" class="r-card" data-id="{{item.id}}" bindtap="openDetail">
+    <view class="row">
+      <view class="flex1">
+        <view class="r-name">{{item.name}}</view>
+        <view class="row" style="margin-top:10rpx">
+          <text class="mini-tag" style="background:{{item.regionColor}}1A;color:{{item.regionColor}}">{{item.regionName}}</text>
+          <text class="mini-tag">{{item.catName}}</text>
+          <text class="mini-tag">{{item.time}}分钟</text>
+          <text class="mini-tag">{{item.kcal}}千卡</text>
+        </view>
+      </view>
+      <view wx:if="{{item.suitText}}" class="suit {{item.suitCls}}">{{item.suitText}}</view>
+    </view>
+    <view wx:if="{{item.goodFor}}" class="r-good">适合：{{item.goodFor}}</view>
+    <view class="wrap" style="margin-top:10rpx">
+      <text wx:for="{{item.tags}}" wx:for-item="t" wx:key="*this" class="tag">{{t}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="empty">
+    <text class="emoji">🔍</text>
+    <view>没有找到符合条件的菜</view>
+    <view class="btn btn-ghost btn-sm" style="margin-top:24rpx" bindtap="reset">清空筛选</view>
+  </view>
+
+</view>
