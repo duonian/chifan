@@ -1,0 +1,122 @@
+.hero {
+  padding: 20rpx 8rpx 36rpx;
+}
+.hero-date { font-size: 24rpx; color: #A2988B; letter-spacing: 2rpx; }
+.hero-title { font-size: 46rpx; font-weight: 700; color: #2E2822; margin-top: 12rpx; line-height: 1.35; }
+.hero-sub { font-size: 24rpx; color: #9A9086; margin-top: 12rpx; }
+
+/* 成员横条 */
+.member-strip {
+  display: flex;
+  overflow-x: auto;
+  padding: 24rpx 0 8rpx;
+  gap: 24rpx;
+}
+.member-chip {
+  flex-shrink: 0;
+  width: 150rpx;
+  text-align: center;
+}
+.member-chip .avatar { margin: 0 auto 12rpx; }
+.member-name { font-size: 26rpx; font-weight: 600; color: #3A342D; }
+.member-meta { font-size: 21rpx; color: #A2988B; }
+.member-cond {
+  font-size: 21rpx;
+  color: #B85C38;
+  background: #FBEFE8;
+  border-radius: 100rpx;
+  padding: 2rpx 10rpx;
+  margin-top: 8rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.guest-input {
+  width: 120rpx;
+  height: 62rpx;
+  background: #F5F1EA;
+  border-radius: 12rpx;
+  text-align: center;
+  font-size: 28rpx;
+}
+
+/* 地区 */
+.region-chip {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 22rpx;
+  border-radius: 100rpx;
+  background: #F5F1EA;
+  color: #7A6F62;
+  font-size: 26rpx;
+  margin: 0 16rpx 16rpx 0;
+  border: 2rpx solid transparent;
+}
+.region-chip.on {
+  background: #FBEFE8;
+  color: #B85C38;
+  border-color: #E2B7A2;
+  font-weight: 600;
+}
+.region-short {
+  display: inline-block;
+  width: 34rpx;
+  height: 34rpx;
+  line-height: 34rpx;
+  text-align: center;
+  border-radius: 8rpx;
+  background: #E4DBCD;
+  color: #7A6F62;
+  font-size: 20rpx;
+  margin-right: 10rpx;
+}
+.region-chip.on .region-short { background: #B85C38; color: #fff; }
+
+/* CTA */
+.cta-card {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #B85C38, #96442A);
+  border-radius: 26rpx;
+  padding: 36rpx 34rpx;
+  color: #fff;
+  box-shadow: 0 10rpx 28rpx rgba(184, 92, 56, 0.28);
+  margin: 28rpx 0;
+}
+.cta-title { font-size: 34rpx; font-weight: 700; }
+.cta-sub { font-size: 24rpx; opacity: .85; margin-top: 8rpx; }
+.cta-left { flex: 1; }
+.cta-arrow { font-size: 44rpx; opacity: .9; }
+
+/* 摘要 */
+.summary-row { display: flex; padding: 14rpx 0; }
+.summary-label {
+  width: 96rpx;
+  flex-shrink: 0;
+  font-size: 26rpx;
+  color: #B85C38;
+  font-weight: 600;
+}
+.summary-dishes { flex: 1; font-size: 26rpx; color: #4A443C; line-height: 1.6; }
+
+.quick-btn {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  background: #F5F1EA;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  margin-right: 18rpx;
+}
+.quick-btn:last-child { margin-right: 0; }
+
+.foot-note {
+  margin-top: 40rpx;
+  padding: 24rpx;
+  font-size: 22rpx;
+  color: #A99F92;
+  line-height: 1.8;
+  background: #F0EBE2;
+  border-radius: 18rpx;
+}
