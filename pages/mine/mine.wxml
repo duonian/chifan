@@ -1,0 +1,101 @@
+<view class="page">
+
+  <!-- 个人中心头部 -->
+  <view class="me-head">
+    <view class="me-avatar">食</view>
+    <view class="me-info">
+      <view class="me-name">家常安食</view>
+      <view class="me-sub">家庭辨证配餐 · 数据只存在本机</view>
+    </view>
+  </view>
+
+  <!-- 地区口味 -->
+  <view class="card">
+    <view class="row-between">
+      <view class="h2">地区口味</view>
+      <view class="extra">可多选</view>
+    </view>
+    <view class="wrap" style="margin-top:14rpx">
+      <view wx:for="{{regions}}" wx:key="id"
+            class="region-chip {{settings.regions && settings.regions.indexOf(item.id) > -1 ? 'on' : ''}}"
+            data-id="{{item.id}}" bindtap="toggleRegion">
+        <text class="region-short">{{item.short}}</text>
+        <text>{{item.name}}</text>
+      </view>
+    </view>
+    <view class="muted tiny" style="margin-top:12rpx">优先推荐所选地区的家常菜；不选则默认全部菜系中挑最合适的。</view>
+  </view>
+
+  <!-- 用餐人数 -->
+  <view class="card">
+    <view class="h2">用餐人数</view>
+    <view class="row-between" style="margin-top:14rpx">
+      <view class="small">家庭成员 {{memberCount}} 人 + 客人</view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="guestMinus">−</view>
+        <view class="step-val">{{settings.guestCount || 0}}</view>
+        <view class="step-btn" bindtap="guestPlus">＋</view>
+      </view>
+    </view>
+    <view class="muted tiny" style="margin-top:10rpx">今日按 <text class="accent strong">{{peopleCount}}</text> 人份计算食材用量</view>
+  </view>
+
+  <!-- 最长烹饪时间 -->
+  <view class="card">
+    <view class="row-between">
+      <view class="h2">最长烹饪时间</view>
+      <view class="stepper">
+        <view class="step-btn" bindtap="timeMinus">−</view>
+        <view class="step-val">{{settings.maxTime || 0}}分</view>
+        <view class="step-btn" bindtap="timePlus">＋</view>
+      </view>
+    </view>
+    <view class="muted tiny" style="margin-top:10rpx">超过该时长的菜会扣分；设为 0 表示不限时。</view>
+  </view>
+
+  <!-- 全家忌口 / 不吃的东西 -->
+  <view class="card">
+    <view class="h2">不吃的东西（全家忌口）</view>
+    <view class="muted tiny" style="margin-top:8rpx">加入后，含这些食材的菜会整道被排除。</view>
+
+    <view wx:if="{{settings.exclude.length}}" class="wrap" style="margin-top:14rpx">
+      <view wx:for="{{settings.exclude}}" wx:key="*this" class="exclude-chip" data-name="{{item}}" bindtap="removeExclude">
+        {{item}} <text class="exclude-x">×</text>
+      </view>
+    </view>
+
+    <view class="add-row">
+      <input class="add-input" placeholder="如：香菜、羊肉" value="{{excludeInput}}" bindinput="onExcludeInput" confirm-type="done" bindconfirm="addExclude" />
+      <view class="btn btn-primary btn-sm" bindtap="addExclude">添加</view>
+    </view>
+
+    <view class="muted tiny" style="margin-top:14rpx">快速添加：</view>
+    <view class="wrap" style="margin-top:10rpx">
+      <view wx:for="{{excludeSuggestions}}" wx:key="*this"
+            class="suggest-chip {{settings.exclude.indexOf(item) > -1 ? 'on' : ''}}"
+            data-name="{{item}}" bindtap="quickExclude">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 家庭成员入口 -->
+  <view class="card menu-card" bindtap="goMembers">
+    <view class="menu-left">👨‍👩‍👦 家庭成员（{{memberCount}}）</view>
+    <view class="menu-arrow">管理 ›</view>
+  </view>
+
+  <!-- 我的厨房入口 -->
+  <view class="card menu-card" bindtap="goKitchen">
+    <view class="menu-left">🍳 我的厨房</view>
+    <view class="menu-arrow">记录常吃菜 / 清库存搭配 ›</view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="foot-note">
+    膳食建议参考中医「辨证施膳」与现代营养学常识，用于日常家庭饮食搭配参考，
+    不能替代医生诊断与药物治疗。如有明确疾病，请遵医嘱调整饮食。
+  </view>
+
+  <view class="btn btn-ghost btn-block" style="margin-top:8rpx" bindtap="clearData">清空本地数据 / 恢复示例</view>
+
+  <view style="height:40rpx"></view>
+</view>
