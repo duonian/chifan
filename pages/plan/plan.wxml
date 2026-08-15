@@ -1,0 +1,152 @@
+<view class="page">
+
+  <!-- 日期与人数 -->
+  <view class="topbar">
+    <view class="date-nav" data-d="-1" bindtap="changeDate">‹</view>
+    <view class="date-center">
+      <view class="date-main">{{dateLabel}}</view>
+      <view class="date-sub">{{peopleCount}} 人份 · {{regionNames}}</view>
+    </view>
+    <view class="date-nav" data-d="1" bindtap="changeDate">›</view>
+  </view>
+
+  <!-- 无成员 -->
+  <view wx:if="{{!hasMembers}}" class="empty">
+    <text class="emoji">📝</text>
+    <view>还没有家庭成员档案</view>
+    <view class="muted tiny" style="margin-top:12rpx">先录入每个人的年龄、性别和身体状况</view>
+    <view class="btn btn-primary btn-sm" style="margin-top:28rpx" bindtap="goMembers">去添加成员</view>
+  </view>
+
+  <!-- 未生成 -->
+  <view wx:elif="{{!generated}}" class="card gen-card">
+    <view class="gen-emoji">🍲</view>
+    <view class="h2" style="text-align:center">为这一天生成家庭食谱</view>
+    <view class="muted small" style="text-align:center;margin:14rpx 0 30rpx">
+      系统会逐个计算每位成员的适配分数，取「平均分 + 最低分保护」，
+      确保没有人被将就。
+    </view>
+    <view class="btn btn-primary btn-block" bindtap="onGenerate">开始生成</view>
+  </view>
+
+  <!-- 已生成 -->
+  <block wx:else>
+
+    <!-- 三餐 -->
+    <view wx:for="{{viewMeals}}" wx:for-item="meal" wx:key="key" class="meal-block">
+      <view class="meal-head">
+        <text class="meal-icon">{{meal.icon}}</text>
+        <text class="meal-name">{{meal.name}}</text>
+        <text class="meal-time">{{meal.time}}</text>
+      </view>
+
+      <view wx:for="{{meal.dishes}}" wx:for-item="d" wx:key="id" class="dish-card">
+        <view class="dish-top" data-id="{{d.id}}" bindtap="openDetail">
+          <view class="flex1">
+            <view class="row">
+              <text class="dish-name">{{d.name}}</text>
+            </view>
+            <view class="row" style="margin-top:10rpx">
+              <text class="mini-tag" style="background:{{d.regionColor}}1A;color:{{d.regionColor}}">{{d.regionName}}</text>
+              <text class="mini-tag">{{d.catName}}</text>
+              <text class="mini-tag">{{d.time}}分钟</text>
+              <text class="mini-tag">{{d.kcal}}千卡/人</text>
+            </view>
+          </view>
+          <view class="suit {{d.suitCls}}">{{d.total}} 分 · {{d.suitText}}</view>
+        </view>
+
+        <view class="dish-ing">
+          <text class="dish-ing-label">{{peopleCount}}人份食材</text>
+          {{d.ingText}}
+        </view>
+
+        <view wx:if="{{d.highlights}}" class="dish-line good">
+          ✓ 对 {{d.highlights}} 特别有益
+        </view>
+
+        <view wx:for="{{d.cautions}}" wx:for-item="c" wx:key="name" class="dish-line caution">
+          ⚠ {{c.name}}：{{c.reason}}
+        </view>
+
+        <view wx:if="{{d.tips}}" class="dish-tip">💡 {{d.tips}}</view>
+
+        <view class="dish-foot">
+          <view class="wrap flex1">
+            <text wx:for="{{d.tags}}" wx:for-item="t" wx:key="*this" class="tag">{{t}}</text>
+          </view>
+          <view class="swap-btn" data-meal="{{meal.key}}" data-cat="{{d.cat}}" data-id="{{d.id}}" catchtap="replaceDish">换一道</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="action-row">
+      <view class="btn btn-ghost flex1" bindtap="onRegenerate">换一批</view>
+      <view class="btn btn-ghost flex1" style="margin:0 20rpx" bindtap="copyPlan">复制食谱</view>
+      <view class="btn btn-primary flex1" bindtap="goShopping">采购清单</view>
+    </view>
+
+    <!-- 营养概览（页面底部） -->
+    <view class="section-title">
+      <view class="bar"></view>
+      <view class="txt">今日营养概览</view>
+    </view>
+    <view wx:if="{{nutrition}}" class="card nutri-card">
+      <view class="nutri-item">
+        <view class="nutri-num">{{nutrition.kcalPerPerson}}</view>
+        <view class="nutri-label">千卡/人</view>
+      </view>
+      <view class="nutri-item">
+        <view class="nutri-num">{{nutrition.proteinPerPerson}}<text class="unit">g</text></view>
+        <view class="nutri-label">蛋白质/人</view>
+      </view>
+      <view class="nutri-item">
+        <view class="nutri-num {{nutrition.naLevel === 'high' ? 'warn' : (nutrition.naLevel === 'mid' ? 'mid' : 'ok')}}">
+          {{nutrition.saltGram}}<text class="unit">g</text>
+        </view>
+        <view class="nutri-label">折合食盐/人</view>
+      </view>
+      <view class="nutri-item">
+        <view class="nutri-num">{{nutrition.kcalTotal}}</view>
+        <view class="nutri-label">全家总热量</view>
+      </view>
+    </view>
+    <view wx:if="{{nutrition && nutrition.naLevel === 'high'}}" class="notice notice-danger">
+      今日钠摄入偏高（每人约 {{nutrition.saltGram}}g 盐，建议 ≤5g）。
+      建议：减少一道重口味菜，或把汤类改为不加盐的清汤。
+    </view>
+    <view class="muted tiny" style="text-align:center;margin-top:18rpx">完整营养分解见底部「营养概览」标签页</view>
+
+    <!-- 成员提醒（页面最底部） -->
+    <view class="section-title">
+      <view class="bar"></view>
+      <view class="txt">今日个人提醒</view>
+    </view>
+    <view wx:for="{{notes}}" wx:key="memberId" class="card note-card">
+      <view class="row">
+        <text class="h3">{{item.name}}</text>
+        <text wx:for="{{item.conditionNames}}" wx:for-item="cn" wx:key="*this" class="tag tag-info" style="margin-left:12rpx">{{cn}}</text>
+      </view>
+      <view wx:for="{{item.warns}}" wx:for-item="w" wx:key="dish" class="dish-line caution" style="margin-top:12rpx">
+        ⚠ {{w.dish}}：{{w.reason}}
+      </view>
+      <view wx:for="{{item.tips}}" wx:for-item="t" wx:key="*this" class="note-tip">· {{t}}</view>
+      <view wx:if="{{!item.warns.length && !item.tips.length}}" class="muted small">今日菜单对 TA 无特别禁忌，正常食用即可。</view>
+    </view>
+
+    <!-- 冲突（页面最底部） -->
+    <block wx:if="{{conflicts.length}}">
+      <view class="section-title">
+        <view class="bar"></view>
+        <view class="txt">怎么做才能兼顾所有人</view>
+      </view>
+      <view wx:for="{{conflicts}}" wx:key="title" class="notice">
+        <view class="strong" style="margin-bottom:8rpx">{{item.title}}</view>
+        <view>{{item.advice}}</view>
+      </view>
+    </block>
+
+  </block>
+
+</view>
