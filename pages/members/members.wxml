@@ -1,0 +1,157 @@
+<view class="page">
+
+  <view class="head">
+    <view class="h1">家庭成员</view>
+    <view class="muted">每个人的年龄、性别与身体状况，决定了推荐结果</view>
+  </view>
+
+  <!-- 成员列表 -->
+  <view wx:for="{{list}}" wx:key="id" class="card member-card">
+    <view class="row">
+      <view class="avatar {{item.gender === 'female' ? 'avatar-female' : 'avatar-male'}}">{{item.initial}}</view>
+      <view class="flex1" style="margin-left:20rpx">
+        <view class="row">
+          <text class="h3">{{item.name}}</text>
+          <text class="tag" style="margin-left:16rpx">{{item.age}}岁 · {{item.genderName}} · {{item.stage}}</text>
+        </view>
+        <view wx:if="{{item.note}}" class="muted tiny" style="margin-top:6rpx">{{item.note}}</view>
+      </view>
+    </view>
+
+    <view class="wrap" style="margin-top:18rpx">
+      <view wx:for="{{item.condList}}" wx:for-item="c" wx:key="id"
+            class="cond-pill" style="background:{{c.color}}1A;color:{{c.color}}">{{c.name}}</view>
+      <view wx:if="{{!item.condList.length}}" class="tag tag-good">暂无特殊状况</view>
+    </view>
+
+    <view wx:if="{{item.dislikes.length || item.allergies.length}}" class="muted tiny" style="margin-top:12rpx">
+      <text wx:if="{{item.allergies.length}}">过敏：{{item.allergies}} </text>
+      <text wx:if="{{item.dislikes.length}}">不吃：{{item.dislikes}}</text>
+    </view>
+
+    <view class="divider"></view>
+    <view class="row">
+      <view class="link-btn" data-id="{{item.id}}" bindtap="editMember">编辑档案</view>
+      <view class="link-btn warn" data-id="{{item.id}}" bindtap="removeMember">删除</view>
+    </view>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="empty">
+    <text class="emoji">👨‍👩‍👧‍👦</text>
+    <view>还没有家庭成员</view>
+    <view class="muted tiny" style="margin-top:12rpx">添加成员后，系统会根据每个人的体质自动调和菜单</view>
+  </view>
+
+  <view class="btn btn-primary btn-block" style="margin-top:20rpx" bindtap="addMember">+ 添加家庭成员</view>
+  <view wx:if="{{list.length}}" class="btn btn-ghost btn-block" style="margin-top:20rpx" bindtap="goPlan">去生成今日食谱</view>
+
+  <!-- ============ 编辑弹层 ============ -->
+  <view wx:if="{{editing}}" class="mask" bindtap="closeEdit"></view>
+  <view wx:if="{{editing}}" class="sheet" catchtap="noop">
+    <view class="sheet-head">
+      <view class="h2">{{form.id ? '编辑成员' : '添加成员'}}</view>
+      <view class="sheet-close" bindtap="closeEdit">✕</view>
+    </view>
+
+    <scroll-view scroll-y class="sheet-body">
+
+      <view class="field">
+        <view class="field-label">称呼</view>
+        <input class="field-input" placeholder="如：妈妈 / 爸爸 / 我" value="{{form.name}}" bindinput="onName" />
+      </view>
+
+      <view class="field">
+        <view class="field-label">性别</view>
+        <view class="row">
+          <view class="seg {{form.gender === 'male' ? 'on' : ''}}" data-g="male" bindtap="setGender">男</view>
+          <view class="seg {{form.gender === 'female' ? 'on' : ''}}" data-g="female" bindtap="setGender">女</view>
+        </view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">年龄</view>
+        <input class="field-input" type="number" placeholder="请输入周岁" value="{{form.age}}" bindinput="onAge" />
+        <view class="muted tiny" style="margin-top:8rpx">≤12 岁自动按儿童标准（少盐少辣、重蛋白钙质）；≥65 岁自动按老年标准（软烂低盐）</view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">
+          身体状况 · 已选 {{form.conditions.length}} 项
+        </view>
+        <view class="muted tiny" style="margin-bottom:16rpx">可多选。点击右侧 ⓘ 查看该症状的调理原则</view>
+
+        <view wx:for="{{groups}}" wx:key="key" class="cond-group">
+          <view class="cond-group-head" data-k="{{item.key}}" bindtap="toggleGroup">
+            <text class="strong">{{item.name}}</text>
+            <text class="muted tiny">{{openGroup === item.key ? '收起 ▲' : '展开 ▼'}}</text>
+          </view>
+          <view wx:if="{{openGroup === item.key}}" class="cond-list">
+            <view wx:for="{{item.items}}" wx:for-item="c" wx:key="id" class="cond-item">
+              <view class="cond-check {{form.conditions.indexOf(c.id) > -1 ? 'on' : ''}}"
+                    data-id="{{c.id}}" bindtap="toggleCond">
+                <view class="cond-box">{{form.conditions.indexOf(c.id) > -1 ? '✓' : ''}}</view>
+                <view class="flex1">
+                  <view class="cond-name">{{c.name}}</view>
+                  <view class="cond-brief">{{c.brief}}</view>
+                </view>
+              </view>
+              <view class="cond-info" data-id="{{c.id}}" catchtap="showCondDetail">ⓘ</view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="field">
+        <view class="field-label">忌口 / 不爱吃（选填）</view>
+        <input class="field-input" placeholder="如：香菜、苦瓜、内脏" value="{{form.dislikesText}}" bindinput="onDislikes" />
+      </view>
+
+      <view class="field">
+        <view class="field-label">食物过敏（选填）</view>
+        <input class="field-input" placeholder="如：虾、芒果。含此类食材的菜会被直接排除" value="{{form.allergiesText}}" bindinput="onAllergies" />
+      </view>
+
+      <view class="field">
+        <view class="field-label">备注（选填）</view>
+        <textarea class="field-textarea" placeholder="如：血压 150/95，正在服药" value="{{form.note}}" bindinput="onNote" />
+      </view>
+
+      <view style="height:40rpx"></view>
+    </scroll-view>
+
+    <view class="sheet-foot">
+      <view class="btn btn-primary btn-block" bindtap="save">保存</view>
+    </view>
+  </view>
+
+  <!-- 症状详情 -->
+  <view wx:if="{{detailCond}}" class="mask" bindtap="hideCondDetail"></view>
+  <view wx:if="{{detailCond}}" class="cond-detail" catchtap="noop">
+    <view class="h2" style="color:{{detailCond.color}}">{{detailCond.name}}</view>
+    <view class="muted small" style="margin:10rpx 0 20rpx">{{detailCond.brief}}</view>
+
+    <view class="dl">常见表现</view>
+    <view class="wrap">
+      <view wx:for="{{detailCond.symptoms}}" wx:key="*this" class="tag">{{item}}</view>
+    </view>
+
+    <view class="dl">调理原则</view>
+    <view class="dd">{{detailCond.principle}}</view>
+
+    <view class="dl">宜多吃</view>
+    <view class="wrap">
+      <view wx:for="{{detailCond.preferFoods}}" wx:key="*this" class="tag tag-good">{{item}}</view>
+    </view>
+
+    <view class="dl">应少吃 / 忌口</view>
+    <view class="wrap">
+      <view wx:for="{{detailCond.avoidFoods}}" wx:key="*this" class="tag tag-bad">{{item}}</view>
+    </view>
+
+    <view class="dl">烹饪建议</view>
+    <view class="dd">{{detailCond.cookAdvice}}</view>
+
+    <view class="btn btn-ghost btn-block" style="margin-top:24rpx" bindtap="hideCondDetail">知道了</view>
+  </view>
+
+</view>
