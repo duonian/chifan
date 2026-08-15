@@ -1,0 +1,111 @@
+<view class="page" wx:if="{{recipe}}">
+
+  <view class="d-head">
+    <view class="h1">{{recipe.name}}</view>
+    <view class="row" style="margin-top:16rpx">
+      <text class="mini-tag" style="background:{{region.color}}1A;color:{{region.color}}">{{region.name}}</text>
+      <text class="mini-tag">{{catName}}</text>
+      <text class="mini-tag">{{recipe.nature}}性</text>
+      <text class="mini-tag">{{recipe.time}}分钟</text>
+    </view>
+  </view>
+
+  <!-- 家庭适配 -->
+  <view wx:if="{{familyScore !== null}}" class="card score-card">
+    <view class="row-between">
+      <view>
+        <view class="muted small">这道菜与你家的匹配度</view>
+        <view class="score-num">{{familyScore}}<text class="score-unit">分</text></view>
+      </view>
+      <view class="score-badge">{{familySuit}}</view>
+    </view>
+    <view class="divider"></view>
+    <view wx:for="{{analysis}}" wx:key="name" class="ana-row">
+      <view class="avatar avatar-sm {{item.gender === 'female' ? 'avatar-female' : 'avatar-male'}}">{{item.initial}}</view>
+      <view class="flex1" style="margin-left:16rpx">
+        <view class="row">
+          <text class="strong small">{{item.name}}</text>
+          <text class="ana-level lv-{{item.level}}">{{item.score}} 分 · {{item.text}}</text>
+        </view>
+        <view wx:if="{{item.plus.length}}" class="ana-line good">+ {{item.plus}}</view>
+        <view wx:for="{{item.minus}}" wx:for-item="mn" wx:key="*this" class="ana-line bad">− {{mn}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 营养 -->
+  <view class="card nutri-row">
+    <view class="nutri-cell"><view class="nc-num">{{recipe.kcal}}</view><view class="nc-lbl">千卡/人</view></view>
+    <view class="nutri-cell"><view class="nc-num">{{recipe.protein}}g</view><view class="nc-lbl">蛋白质/人</view></view>
+    <view class="nutri-cell"><view class="nc-num">{{recipe.na}}mg</view><view class="nc-lbl">钠/人</view></view>
+  </view>
+
+  <!-- 食材 -->
+  <view class="section-title">
+    <view class="bar"></view>
+    <view class="txt">食材用量</view>
+  </view>
+  <view class="card">
+    <view class="row-between" style="margin-bottom:20rpx">
+      <text class="small">按人数换算</text>
+      <view class="stepper">
+        <view class="step-btn" data-d="-1" bindtap="changePeople">−</view>
+        <view class="step-num">{{people}} 人</view>
+        <view class="step-btn" data-d="1" bindtap="changePeople">+</view>
+      </view>
+    </view>
+    <view wx:for="{{ingList}}" wx:key="n" class="ing-row">
+      <text class="ing-name">{{item.n}}</text>
+      <text class="ing-qty">{{item.q}} {{item.u}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="small"><text class="muted">调味：</text>{{recipe.season}}</view>
+    <view class="btn btn-ghost btn-block btn-sm" style="margin-top:22rpx" bindtap="copyIng">复制食材清单</view>
+  </view>
+
+  <!-- 做法 -->
+  <view class="section-title">
+    <view class="bar"></view>
+    <view class="txt">做法步骤</view>
+  </view>
+  <view class="card">
+    <view wx:for="{{recipe.steps}}" wx:key="*this" class="step-row">
+      <view class="step-idx">{{index + 1}}</view>
+      <view class="flex1">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 宜忌 -->
+  <view class="section-title">
+    <view class="bar"></view>
+    <view class="txt">宜忌人群</view>
+  </view>
+  <view class="card">
+    <view class="dl">👍 适合</view>
+    <view class="wrap">
+      <view wx:for="{{goodNames}}" wx:key="id" class="tag tag-good">{{item.name}}</view>
+      <view wx:if="{{!goodNames.length}}" class="muted small">无特别指向，属于百搭菜</view>
+    </view>
+    <view class="dl" style="margin-top:24rpx">⚠️ 不建议</view>
+    <view class="wrap">
+      <view wx:for="{{badNames}}" wx:key="id" class="tag tag-bad">{{item.name}}</view>
+      <view wx:if="{{!badNames.length}}" class="muted small">暂无明确禁忌人群</view>
+    </view>
+  </view>
+
+  <view class="notice">
+    <view class="strong" style="margin-bottom:8rpx">💡 专业提示</view>
+    <view>{{recipe.tips}}</view>
+  </view>
+
+  <view wx:if="{{region.healthNote}}" class="notice notice-ok">
+    <view class="strong" style="margin-bottom:8rpx">关于{{region.name}}菜的健康提示</view>
+    <view>{{region.healthNote}}</view>
+  </view>
+
+  <view class="btn {{isFav ? 'btn-ghost' : 'btn-primary'}} btn-block" style="margin-top:24rpx" bindtap="toggleFav">
+    {{isFav ? '★ 已收藏' : '☆ 收藏这道菜'}}
+  </view>
+
+  <view style="height:40rpx"></view>
+</view>
