@@ -1,0 +1,94 @@
+/* ===== 采购清单页 ===== */
+.head {
+  padding: 28rpx 30rpx;
+}
+.people-pill {
+  background: #F2ECE3;
+  color: #8A7F71;
+  font-size: 24rpx;
+  font-weight: 600;
+  padding: 8rpx 22rpx;
+  border-radius: 100rpx;
+}
+.progress {
+  height: 14rpx;
+  background: #EDE6DB;
+  border-radius: 100rpx;
+  margin-top: 22rpx;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #B85C38, #D99441);
+  border-radius: 100rpx;
+  transition: width 0.25s ease;
+}
+.progress-txt {
+  text-align: right;
+  color: #A2988B;
+  margin-top: 10rpx;
+}
+
+.list {
+  margin-top: 4rpx;
+}
+.buy-item {
+  display: flex;
+  align-items: center;
+  background: #FFFDFA;
+  border-radius: 18rpx;
+  padding: 24rpx 26rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 16rpx rgba(120, 100, 80, 0.05);
+}
+.buy-item.is-checked {
+  background: #F7F4EE;
+}
+.check {
+  width: 46rpx;
+  height: 46rpx;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2rpx solid #D8CDBD;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 28rpx;
+  margin-right: 22rpx;
+}
+.check.on {
+  background: #4A7C59;
+  border-color: #4A7C59;
+}
+.buy-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #2E2822;
+}
+.buy-name.strike {
+  text-decoration: line-through;
+  color: #B0A697;
+}
+.buy-from {
+  font-size: 22rpx;
+  color: #A2988B;
+  margin-top: 6rpx;
+  line-height: 1.5;
+}
+.buy-qty {
+  flex-shrink: 0;
+  font-size: 27rpx;
+  font-weight: 700;
+  color: #B85C38;
+  margin-left: 16rpx;
+  text-align: right;
+}
+
+.action-row {
+  display: flex;
+  margin-top: 28rpx;
+  gap: 20rpx;
+}
+.ghost-flex { flex: 1; }
+.primary-flex { flex: 1.4; }
