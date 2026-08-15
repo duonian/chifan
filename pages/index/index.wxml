@@ -1,0 +1,93 @@
+<view class="page">
+
+  <!-- 顶部问候 -->
+  <view class="hero">
+    <view class="hero-date">{{dateLabel}}</view>
+    <view class="hero-title">{{greeting}}，今天想吃点什么？</view>
+    <view class="hero-sub">已收录 {{recipeTotal}} 道家常菜 · {{regionTotal}} 个地方菜系</view>
+  </view>
+
+  <!-- 家庭概览 -->
+  <view class="card">
+    <view class="row-between">
+      <view class="h2">我的家庭</view>
+      <view class="muted" bindtap="goMembers">管理 ›</view>
+    </view>
+
+    <view wx:if="{{memberViews.length}}" class="member-strip">
+      <view wx:for="{{memberViews}}" wx:key="id" class="member-chip" bindtap="goMembers">
+        <view class="avatar {{item.gender === 'female' ? 'avatar-female' : 'avatar-male'}}">{{item.initial}}</view>
+        <view class="member-name">{{item.name}}</view>
+        <view class="member-meta">{{item.age}}岁 {{item.genderName}}</view>
+        <view class="member-cond">{{item.condNames.length ? item.condNames[0] : '健康'}}{{item.condNames.length > 1 ? ' 等' + item.condNames.length + '项' : ''}}</view>
+      </view>
+    </view>
+
+    <view wx:else class="empty">
+      <text class="emoji">🍚</text>
+      <view>还没有添加家庭成员</view>
+      <view class="btn btn-primary btn-sm" style="margin-top:24rpx" bindtap="goMembers">添加第一位成员</view>
+    </view>
+
+    <view wx:if="{{memberViews.length}}" class="divider"></view>
+    <view wx:if="{{memberViews.length}}" class="row-between">
+      <view class="small">今日按 <text class="accent strong">{{peopleCount}}</text> 人份备餐</view>
+      <view class="muted tiny" bindtap="goMine">地区/人数设置 ›</view>
+    </view>
+  </view>
+
+  <!-- 体质冲突提醒 -->
+  <block wx:if="{{conflicts.length}}">
+    <view class="section-title">
+      <view class="bar"></view>
+      <view class="txt">家庭体质冲突提醒</view>
+    </view>
+    <view wx:for="{{conflicts}}" wx:key="title" class="notice">
+      <view class="strong" style="margin-bottom:8rpx">⚖️ {{item.title}}</view>
+      <view class="tiny" style="margin-bottom:8rpx;opacity:.8">{{item.sideA}} ←→ {{item.sideB}}</view>
+      <view>{{item.advice}}</view>
+    </view>
+  </block>
+
+  <!-- 生成入口 -->
+  <view class="cta-card" bindtap="goPlan">
+    <view class="cta-left">
+      <view class="cta-title">生成今日家庭食谱</view>
+      <view class="cta-sub">兼顾每位成员的体质与忌口</view>
+    </view>
+    <view class="cta-arrow">→</view>
+  </view>
+
+  <!-- 今日摘要 -->
+  <block wx:if="{{todayPlan}}">
+    <view class="section-title">
+      <view class="bar"></view>
+      <view class="txt">今日已排</view>
+      <view class="extra" bindtap="goPlan">查看详情 ›</view>
+    </view>
+    <view class="card">
+      <view wx:for="{{summary}}" wx:key="label" class="summary-row">
+        <view class="summary-label">{{item.label}}</view>
+        <view class="summary-dishes">{{item.dishes || '未安排'}}</view>
+      </view>
+      <view class="divider"></view>
+      <view class="row">
+        <view class="quick-btn" bindtap="goShopping">🛒 采购清单</view>
+        <view class="quick-btn" bindtap="goRecipes">📖 菜谱库</view>
+      </view>
+    </view>
+  </block>
+
+  <view class="foot-note">
+    本小程序的膳食建议参考中医「辨证施膳」与现代营养学常识整理，
+    用于日常家庭饮食搭配参考，不能替代医生诊断与药物治疗。
+    如有明确疾病，请遵医嘱调整饮食。
+  </view>
+
+  <!-- 我的厨房入口 -->
+  <view class="card" style="display:flex;align-items:center;justify-content:space-between" bindtap="goKitchen">
+    <view style="font-size:30rpx;font-weight:500">🍳 我的厨房</view>
+    <view style="font-size:26rpx;color:#B85C38">记录常吃菜 / 清库存搭配 ›</view>
+  </view>
+
+</view>
