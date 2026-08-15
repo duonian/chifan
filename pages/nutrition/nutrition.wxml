@@ -1,0 +1,82 @@
+<view class="page">
+
+  <!-- 日期切换 -->
+  <view class="topbar">
+    <view class="date-nav" data-d="-1" bindtap="changeDate">‹</view>
+    <view class="date-center">
+      <view class="date-main">{{dateLabel}}</view>
+      <view class="date-sub">营养概览 · {{peopleCount}} 人份</view>
+    </view>
+    <view class="date-nav" data-d="1" bindtap="changeDate">›</view>
+  </view>
+
+  <!-- 无成员 -->
+  <view wx:if="{{!hasMembers}}" class="empty">
+    <text class="emoji">🥗</text>
+    <view>还没有家庭成员档案</view>
+    <view class="muted tiny" style="margin-top:12rpx">先在「我的」里添加成员并填写身体状况</view>
+    <view class="btn btn-primary btn-sm" style="margin-top:28rpx" bindtap="goPlan">去添加成员</view>
+  </view>
+
+  <!-- 未生成 -->
+  <view wx:elif="{{!hasPlan}}" class="empty">
+    <text class="emoji">📊</text>
+    <view>这一天还没生成食谱</view>
+    <view class="muted tiny" style="margin-top:12rpx">生成当日家庭食谱后，这里会自动汇总营养</view>
+    <view class="btn btn-primary btn-sm" style="margin-top:28rpx" bindtap="goPlan">去生成今日食谱</view>
+  </view>
+
+  <block wx:else>
+
+    <!-- 整体营养 -->
+    <view class="card">
+      <view class="h2"><view class="bar"></view>今日整体营养</view>
+      <view class="nutri-grid">
+        <view class="nutri-cell">
+          <view class="nutri-num">{{overall.kcalPerPerson}}</view>
+          <view class="nutri-label">千卡 / 人</view>
+        </view>
+        <view class="nutri-cell">
+          <view class="nutri-num">{{overall.proteinPerPerson}}<text class="unit">g</text></view>
+          <view class="nutri-label">蛋白质 / 人</view>
+        </view>
+        <view class="nutri-cell">
+          <view class="nutri-num {{overall.naLevel === 'high' ? 'warn' : (overall.naLevel === 'mid' ? 'mid' : 'ok')}}">{{overall.saltGram}}<text class="unit">g</text></view>
+          <view class="nutri-label">食盐 / 人</view>
+        </view>
+        <view class="nutri-cell">
+          <view class="nutri-num">{{overall.kcalTotal}}</view>
+          <view class="nutri-label">全家总热量</view>
+        </view>
+      </view>
+      <view wx:if="{{overall.naLevel === 'high'}}" class="notice notice-danger" style="margin-top:14rpx">
+        钠偏高（约 {{overall.saltGram}}g 盐/人，建议 ≤5g）。建议减少一道重口菜，或汤类改不加盐的清汤。
+      </view>
+    </view>
+
+    <!-- 分餐次营养 -->
+    <view class="card">
+      <view class="h2"><view class="bar"></view>三餐营养分布</view>
+      <view wx:for="{{meals}}" wx:key="key" class="meal-row">
+        <view class="meal-name">{{item.name}}</view>
+        <view class="meal-stat"><text class="ms-num">{{item.kcal}}</text><text class="ms-lbl">千卡</text></view>
+        <view class="meal-stat"><text class="ms-num">{{item.protein}}g</text><text class="ms-lbl">蛋白</text></view>
+        <view class="meal-stat"><text class="ms-num">{{item.salt}}g</text><text class="ms-lbl">盐</text></view>
+      </view>
+    </view>
+
+    <!-- 营养目标与建议 -->
+    <view class="card">
+      <view class="h2"><view class="bar"></view>针对家人的营养重点</view>
+      <view wx:for="{{targets}}" wx:key="title" class="target-row">
+        <view class="target-title">{{item.title}}</view>
+        <view class="target-text">{{item.text}}</view>
+      </view>
+    </view>
+
+    <view class="btn btn-ghost btn-block" style="margin-top:8rpx" bindtap="goPlan">查看 / 生成今日食谱</view>
+
+  </block>
+
+  <view style="height:40rpx"></view>
+</view>
